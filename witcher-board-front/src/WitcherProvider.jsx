@@ -6,6 +6,10 @@ import { STORAGE_KEY, WitcherContext } from "./witcherSessionContext";
  *
  * We keep this separate so it can be passed directly to useState as an
  * initializer function (runs once on mount).
+ *
+ * Why:
+ * - This avoids reading/parsing sessionStorage on every render.
+ * - If storage is corrupt, we safely fall back to null.
  */
 function loadInitialWitcher() {
   try {
@@ -33,9 +37,12 @@ function loadInitialWitcher() {
  * actions based on the chosen witcher in the UI (exam exercise).
  */
 export default function WitcherProvider({ children }) {
+  // Initialize from sessionStorage once.
   const [witcher, setWitcher] = useState(loadInitialWitcher);
 
   const value = useMemo(() => {
+    // Context value is memoized so consumers don't re-render unnecessarily.
+    // (They will still re-render when `witcher` changes.)
     function login(nextWitcher) {
       // Normalize to avoid storing unexpected shapes.
       // If id cannot be coerced to a finite number, we still store NaN,
@@ -45,11 +52,16 @@ export default function WitcherProvider({ children }) {
         name: String(nextWitcher?.name ?? ""),
         avatar: String(nextWitcher?.avatar ?? ""),
       };
+
+      // Persist for the duration of the browser tab.
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+
+      // Update in-memory state.
       setWitcher(normalized);
     }
 
     function logout() {
+      // Clear persistence + state.
       sessionStorage.removeItem(STORAGE_KEY);
       setWitcher(null);
     }

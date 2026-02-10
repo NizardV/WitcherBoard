@@ -12,6 +12,8 @@
  * @returns {Promise<any>}
  */
 async function parseJsonSafe(res) {
+  // Not every response that “should” be JSON is valid JSON.
+  // This helper makes error handling robust by preventing JSON parse crashes.
   try {
     return await res.json();
   } catch {
@@ -33,9 +35,13 @@ export async function readErrorMessage(res) {
   if (contentType.includes("application/json")) {
     const data = await parseJsonSafe(res);
     if (!data) return `HTTP ${res.status}`;
+
+    // Many APIs return errors like: { message: "..." }
+    // If the shape differs, we still return something readable.
     return data?.message || JSON.stringify(data) || `HTTP ${res.status}`;
   }
 
+  // Fallback when server returns plain text.
   const text = await res.text().catch(() => "");
   return text || `HTTP ${res.status}`;
 }
@@ -49,6 +55,8 @@ export async function readErrorMessage(res) {
  * @returns {Promise<T>}
  */
 export async function fetchJson(url, options) {
+  // Keep the API surface tiny: fetch JSON, throw on non-OK.
+  // Pages/hooks can focus on their own UI state instead of repeating boilerplate.
   const res = await fetch(url, options);
   if (!res.ok) {
     const message = await readErrorMessage(res);
@@ -70,6 +78,8 @@ export async function fetchJsonOrNullOnAbort(url, options) {
   try {
     return await fetchJson(url, options);
   } catch (e) {
+    // In React effects, aborting is a normal control-flow event (navigation/unmount).
+    // Returning null makes it easy to "just stop" without showing an error.
     if (e?.name === "AbortError") return null;
     throw e;
   }

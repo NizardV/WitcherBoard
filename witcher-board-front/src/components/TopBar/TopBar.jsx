@@ -1,6 +1,6 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useWitcher } from "../../useWitcher";
-import "./topBar.css";
+import TopBarView from "./TopBarView";
 
 /**
  * Global top navigation bar.
@@ -16,7 +16,7 @@ export default function TopBar() {
   const location = useLocation();
 
   function onLogout() {
-    // Clears sessionStorage + context state
+    // Clears sessionStorage + context state (so all pages update instantly).
     logout();
 
     // Keep the user on the same page, except if already on /login
@@ -26,36 +26,5 @@ export default function TopBar() {
     }
   }
 
-  return (
-    <header className="topBar">
-      <div className="topBarInner">
-        <Link to="/contracts" className="brand">
-          Witcher Board
-        </Link>
-
-        <div className="right">
-          {witcher ? (
-            <>
-              <span className="who">
-                {witcher.avatar ? (
-                  <img className="avatar" src={witcher.avatar} alt={witcher.name} />
-                ) : null}
-                Signed in: {witcher.name}
-              </span>
-              <button type="button" className="linkBtn" onClick={onLogout}>
-                Sign out
-              </button>
-            </>
-          ) : (
-            <>
-              <span className="who">Signed out</span>
-              <Link to="/login" className="linkBtn">
-                Sign in
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-    </header>
-  );
+  return <TopBarView witcher={witcher} onLogout={onLogout} />;
 }

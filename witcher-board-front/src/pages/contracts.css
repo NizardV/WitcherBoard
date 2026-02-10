@@ -1,0 +1,63 @@
+.page {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.desc {
+  margin: 0;
+  color: #333;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+}
+
+.error {
+  color: #b00020;
+}
+
+/* Styles selon status */
+.status-Available {
+  border-left: 6px solid #2e7d32;
+}
+
+.status-Assigned {
+  border-left: 6px solid #ef6c00;
+}
+
+.status-Completed {
+  border-left: 6px solid #455a64;
+  opacity: 0.9;
+}

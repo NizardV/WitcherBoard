@@ -1,0 +1,54 @@
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #111;
+  color: #fff;
+  border-bottom: 1px solid #222;
+}
+
+.topBarInner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.who {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.linkBtn:hover {
+  background: #1a1a1a;
+}

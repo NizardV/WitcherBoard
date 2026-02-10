@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./contracts.css";
+import { Link } from "react-router-dom";
 
 const API_BASE = "http://localhost:3000/api";
 
@@ -77,13 +78,15 @@ export default function ContractsList() {
 
         <div className="grid">
           {contracts.map((c) => (
-            <article key={c.id} className={`card status-${c.status}`}>
-              <header className="cardHeader">
-                <h2 className="title">{c.title}</h2>
-                <span className="badge">{c.status}</span>
-              </header>
-              <p className="desc">{c.description}</p>
-            </article>
+            <Link key={c.id} to={`/contracts/${c.id}`} className="cardLink">
+              <article className={`card status-${c.status}`}>
+                <header className="cardHeader">
+                  <h2 className="title">{c.title}</h2>
+                  <span className="badge">{c.status}</span>
+                </header>
+                <p className="desc">{c.description}</p>
+              </article>
+            </Link>
           ))}
         </div>
       </div>

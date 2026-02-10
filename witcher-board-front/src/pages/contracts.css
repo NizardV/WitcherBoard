@@ -17,6 +17,11 @@
   color: #111;
 }
 
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 .cardHeader {
   display: flex;
   align-items: start;

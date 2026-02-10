@@ -24,7 +24,7 @@ export default function CreateContract() {
       const payload = {
         title: title.trim(),
         description: description.trim(),
-        reward: reward === "" ? null : Number(reward),
+        reward: reward.trim(),
       };
 
       const res = await fetch(`${API_BASE}/contracts/`, {
@@ -36,6 +36,11 @@ export default function CreateContract() {
       });
 
       if (!res.ok) {
+        const contentType = res.headers.get("content-type") ?? "";
+        if (contentType.includes("application/json")) {
+          const data = await res.json().catch(() => null);
+          throw new Error(data?.message || JSON.stringify(data) || `HTTP ${res.status}`);
+        }
         const text = await res.text().catch(() => "");
         throw new Error(text || `HTTP ${res.status}`);
       }
@@ -49,7 +54,7 @@ export default function CreateContract() {
     }
   }
 
-  const isInvalid = !title.trim() || !description.trim() || reward === "";
+  const isInvalid = !title.trim() || !description.trim() || !reward.trim();
 
   return (
     <div className="page">
@@ -92,12 +97,10 @@ export default function CreateContract() {
               <label htmlFor="reward">Récompense</label>
               <input
                 id="reward"
-                type="number"
+                type="text"
                 value={reward}
                 onChange={(e) => setReward(e.target.value)}
-                placeholder="Ex: 250"
-                min={0}
-                step={1}
+                placeholder='Ex: "300 Crowns and a Rune Stone"'
                 required
               />
             </div>

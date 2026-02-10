@@ -71,9 +71,6 @@ export default function Login() {
         <div className="panel">
           <header className="head">
             <h1 className="h1">Connexion sorceleur</h1>
-            <p className="subtitle">
-              Ceci n’est pas une vraie authentification : sélectionnez un sorceleur.
-            </p>
           </header>
 
           {witcher && (

@@ -100,7 +100,7 @@ export default function ContractDetails() {
                 : loadingWitcher
                   ? `#${contract.assignedTo} (chargement...)`
                   : witcher
-                    ? `${witcher.name} (id: ${witcher.id})`
+                    ? `${witcher.name}`
                     : witcherError
                       ? `#${contract.assignedTo} (erreur: ${witcherError})`
                       : `#${contract.assignedTo}`}

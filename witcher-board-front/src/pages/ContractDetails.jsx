@@ -87,6 +87,12 @@ export default function ContractDetails() {
               </span>
             </header>
 
+            <div className="actions">
+              <Link to={`/contracts/${id}/edit`} className="secondaryLink">
+                Modifier
+              </Link>
+            </div>
+
             <p className="desc">{contract.description}</p>
 
             <p className="line">

@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import ContractsList from "./pages/ContractsList";
 import ContractDetails from "./pages/ContractDetails";
 import CreateContract from "./pages/CreateContract";
+import EditContract from "./pages/EditContract";
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/contracts" element={<ContractsList />} />
       <Route path="/contracts/new" element={<CreateContract />} />
+      <Route path="/contracts/:id/edit" element={<EditContract />} />
       <Route path="/contracts/:id" element={<ContractDetails />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

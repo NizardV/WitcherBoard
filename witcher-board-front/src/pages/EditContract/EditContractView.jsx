@@ -3,6 +3,11 @@ import "./editContract.css";
 
 /**
  * Presentational component for Edit contract.
+ *
+ * Notes:
+ * - Status and assigned witcher are shown as read-only meta information.
+ * - The editable fields are title/description/reward.
+ * - The hook handles saving; this view only calls `onSubmit()`.
  */
 export default function EditContractView({
   id,
@@ -39,6 +44,7 @@ export default function EditContractView({
             </header>
 
             <div className="meta">
+              {/* Read-only metadata */}
               <div className="metaItem">
                 <span className="metaLabel">Status</span>
                 <span className={`badge status-${contract.status}`}>{contract.status}</span>
@@ -46,6 +52,9 @@ export default function EditContractView({
               <div className="metaItem">
                 <span className="metaLabel">Assigned to</span>
                 <span className="metaValue">
+                  {/* Similar fallback strategy as details page:
+                      show — / loading / witcher / error / raw id
+                   */}
                   {contract.assignedTo == null ? (
                     "—"
                   ) : loadingAssignedWitcher ? (
@@ -73,6 +82,7 @@ export default function EditContractView({
             <form
               className="form"
               onSubmit={(e) => {
+                // Keep SPA behavior on submit.
                 e.preventDefault();
                 onSubmit();
               }}

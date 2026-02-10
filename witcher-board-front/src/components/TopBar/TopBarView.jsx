@@ -3,6 +3,14 @@ import "./topBar.css";
 
 /**
  * Presentational component for the global top bar.
+ *
+ * Why split from the container?
+ * - The container (`TopBar.jsx`) owns router concerns (navigate + location).
+ * - This view only renders based on props.
+ *
+ * Props:
+ * - `witcher`: current session identity or null
+ * - `onLogout`: callback triggered by the Sign out button
  */
 export default function TopBarView({ witcher, onLogout }) {
   return (

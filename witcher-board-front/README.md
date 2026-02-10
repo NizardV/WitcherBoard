@@ -1,59 +1,92 @@
 # Witcher Board (Front)
 
-Application React (Vite) de gestion de contrats de chasse.
+React (Vite) frontend for a small “contracts board” exam-style project.
 
-## Fonctionnalités
+## Features
 
-- Liste des contrats avec filtres (titre + statut) via query params côté serveur.
-- Détail d’un contrat, avec chargement du sorceleur assigné (si `assignedTo`).
-- Création d’un contrat.
-- Modification d’un contrat.
-- Connexion “simplifiée” en tant que sorceleur (stockée en `sessionStorage`).
-- Actions depuis le détail : s’assigner un contrat (si disponible) et terminer le contrat (si assigné au sorceleur connecté).
+- Contracts list with server-side filters (title + status via query params).
+- Contract details page.
+- Create a contract.
+- Edit a contract.
+- Simplified “witcher sign-in” stored in `sessionStorage`.
+- Actions from details page:
+	- assign an available contract to the current witcher
+	- mark a contract as completed (only when it is assigned to the current witcher)
+- Witcher avatars:
+	- displayed in the TopBar
+	- displayed for assigned contracts (when the backend provides `avatar` URLs)
 
 ## Routes
 
-- `/` : accueil
-- `/contracts` : liste
-- `/contracts/new` : création
-- `/contracts/:id` : détail
-- `/contracts/:id/edit` : édition
-- `/login` : connexion sorceleur
+- `/` home
+- `/contracts` list
+- `/contracts/new` create
+- `/contracts/:id` details
+- `/contracts/:id/edit` edit
+- `/login` witcher sign-in
+
+## Architecture (how to read the code)
+
+This codebase follows a simple “container/hook + view” split:
+
+- **Logic** (state + effects + API calls) lives in small hooks:
+	- `src/pages/**/use*.js`
+- **UI** (rendering only) lives in view components:
+	- `src/pages/**/*View.jsx`
+
+Why this split?
+
+- Views stay easy to scan (mostly JSX + CSS classes).
+- Hooks become the single place to understand data flow.
+- It makes “why/how” clearer: state transitions and fetch patterns are not mixed with markup.
+
+Session/auth is intentionally simplified:
+
+- `src/WitcherProvider.jsx` stores `{ id, name, avatar }` in `sessionStorage`.
+- `src/useWitcher.js` is the convenience hook to access `{ witcher, login, logout }`.
 
 ## API
 
-Base URL : `http://localhost:3000/api`
+Base URL (see `src/api/config.js`):
 
-Endpoints utilisés :
+`http://localhost:3000/api`
 
-- `GET /contracts/` (avec `title` et `status` en query params)
+Endpoints used:
+
+- `GET /contracts/` (supports `title` and `status` as query params)
 - `GET /contracts/:id`
 - `POST /contracts/`
 - `PUT /contracts/:id`
-- `PUT /contracts/:id/assignedTo` (body JSON = un **integer** brut)
-- `PUT /contracts/:id/status` (body JSON = la **string** `"Completed"`)
+- `PUT /contracts/:id/assignedTo` (JSON body = a raw **number**)
+- `PUT /contracts/:id/status` (JSON body = the raw **string** `"Completed"`)
 - `GET /witchers/`
 - `GET /witchers/:id`
 
-Notes importantes (types attendus par le backend) :
+Important backend payload expectations:
 
-- `reward` est envoyé en **string** lors de la création/édition.
-- `assignedTo` n’attend pas `{ "assignedTo": 1 }` mais `1`.
-- `status` n’attend pas `{ "status": "Completed" }` mais `"Completed"`.
+- `reward` is sent as a **string** when creating/editing.
+- `assignedTo` endpoint does NOT expect `{ "assignedTo": 1 }`, it expects `1`.
+- `status` endpoint does NOT expect `{ "status": "Completed" }`, it expects `"Completed"`.
 
-## Lancer le projet
+## Run the project
 
-1) Démarrer le backend sur `http://localhost:3000`
-2) Installer et lancer le front :
+1) Start the backend on `http://localhost:3000`.
+
+2) Start the frontend (from the `witcher-board-front` folder):
 
 ```bash
 npm install
 npm run dev
 ```
 
-Qualité :
+Quality checks:
 
 ```bash
 npm run lint
 npm run build
 ```
+
+## Troubleshooting
+
+- If `npm run dev` fails from the repository root, make sure your terminal is in the frontend folder (`witcher-board-front`).
+- Vite may warn about Node versions (example: Node `22.11.0`). Upgrading to Node `22.12+` (or `20.19+`) removes the warning.

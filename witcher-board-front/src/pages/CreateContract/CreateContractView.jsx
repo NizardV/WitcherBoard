@@ -3,6 +3,11 @@ import "./createContract.css";
 
 /**
  * Presentational component for Create contract.
+ *
+ * Controlled form pattern:
+ * - Input values come from props (state stored in the hook).
+ * - Input changes call setters (also provided by the hook).
+ * - Submitting calls `onSubmit()` which triggers the POST in the hook.
  */
 export default function CreateContractView({
   title,
@@ -31,6 +36,7 @@ export default function CreateContractView({
           <form
             className="form"
             onSubmit={(e) => {
+              // Prevent full page reload on form submit.
               e.preventDefault();
               onSubmit();
             }}

@@ -3,6 +3,13 @@ import "./home.css";
 
 /**
  * Presentational component for Home.
+ *
+ * Purpose:
+ * - Simple landing page that explains the exercise.
+ * - Provides clear navigation to contracts + login.
+ *
+ * It receives `witcher` as a prop so it can adjust the CTA label
+ * ("Sign in" vs "Switch witcher") without reading context directly.
  */
 export default function HomeView({ witcher }) {
   return (

@@ -3,6 +3,16 @@ import "./login.css";
 
 /**
  * Presentational component for Login.
+ *
+ * What it renders:
+ * - The current session (if already signed in)
+ * - A dropdown of witchers (loaded by the hook)
+ * - A visual preview of the selected witcher (avatar + name)
+ *
+ * What it does NOT do:
+ * - Fetch witchers
+ * - Persist session
+ * Those are handled by the hook + provider.
  */
 export default function LoginView({
   witcher,
@@ -42,6 +52,7 @@ export default function LoginView({
             <form
               className="form"
               onSubmit={(e) => {
+                // Prevent default browser form submit.
                 e.preventDefault();
                 onSubmit();
               }}

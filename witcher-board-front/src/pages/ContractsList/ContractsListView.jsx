@@ -3,6 +3,15 @@ import "./contracts.css";
 
 /**
  * Presentational component for the Contracts list.
+ *
+ * Rendering responsibilities:
+ * - Show filters and bind them to the state setters received as props.
+ * - Render a grid of contract cards.
+ * - Enrich assigned contracts with witcher avatar/name using `witchersById`.
+ *
+ * Note:
+ * - Filtering is server-side: the hook builds the URL with query params.
+ * - This view only updates the filter state; it does not perform fetches.
  */
 export default function ContractsListView({
   contracts,
@@ -25,6 +34,7 @@ export default function ContractsListView({
         </div>
 
         <div className="filters">
+          {/* Controlled input: value comes from state, changes call setTitleFilter */}
           <div className="field">
             <label htmlFor="filter-title">Title</label>
             <input
@@ -36,6 +46,7 @@ export default function ContractsListView({
             />
           </div>
 
+          {/* Controlled select for status */}
           <div className="field">
             <label htmlFor="filter-status">Status</label>
             <select
@@ -56,6 +67,7 @@ export default function ContractsListView({
 
         <div className="grid">
           {contracts.map((c) => {
+            // Optional enrichment: only available if we loaded witchers successfully.
             const assigned = c.assignedTo != null ? witchersById.get(c.assignedTo) : null;
 
             return (
@@ -69,6 +81,7 @@ export default function ContractsListView({
 
                   {assigned ? (
                     <div className="assignedRow">
+                      {/* Avatar is optional in API payload */}
                       {assigned.avatar ? (
                         <img className="avatar" src={assigned.avatar} alt={assigned.name} />
                       ) : null}

@@ -109,9 +109,6 @@ export default function EditContract() {
           <div className="panel">
             <header className="head">
               <h1 className="h1">Modifier le contrat</h1>
-              <p className="subtitle">
-                Champs modifiables : titre, description, récompense.
-              </p>
             </header>
 
             <div className="meta">

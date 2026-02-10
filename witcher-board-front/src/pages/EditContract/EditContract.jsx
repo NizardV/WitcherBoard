@@ -72,7 +72,7 @@ export default function EditContract() {
             setAssignedWitcher(w);
           } catch (e) {
             if (e?.name !== "AbortError") {
-              setAssignedWitcherError(e?.message ?? "Erreur inconnue");
+              setAssignedWitcherError(e?.message ?? "Unknown error");
             }
           } finally {
             setLoadingAssignedWitcher(false);
@@ -80,7 +80,7 @@ export default function EditContract() {
         }
       } catch (e) {
         if (e?.name !== "AbortError") {
-          setError(e?.message ?? "Erreur inconnue");
+          setError(e?.message ?? "Unknown error");
         }
       } finally {
         setLoading(false);
@@ -121,7 +121,7 @@ export default function EditContract() {
       // Back to details after successful update
       navigate(`/contracts/${id}`);
     } catch (e2) {
-      setError(e2?.message ?? "Erreur inconnue");
+      setError(e2?.message ?? "Unknown error");
     } finally {
       setSubmitting(false);
     }
@@ -133,21 +133,21 @@ export default function EditContract() {
     <div className="page editContract">
       <div className="container">
         <Link to={`/contracts/${id}`} className="backLink">
-          ← Retour au détail
+          ← Back to details
         </Link>
 
-        {loading && <p>Chargement...</p>}
-        {error && <p className="error">Erreur : {error}</p>}
+        {loading && <p>Loading...</p>}
+        {error && <p className="error">Error: {error}</p>}
 
         {contract && (
           <div className="panel">
             <header className="head">
-              <h1 className="h1">Modifier le contrat</h1>
+              <h1 className="h1">Edit contract</h1>
             </header>
 
             <div className="meta">
               <div className="metaItem">
-                <span className="metaLabel">Statut</span>
+                <span className="metaLabel">Status</span>
                 <span className={`badge status-${contract.status}`}>{contract.status}</span>
               </div>
               <div className="metaItem">
@@ -156,7 +156,7 @@ export default function EditContract() {
                   {contract.assignedTo == null
                     ? "—"
                     : loadingAssignedWitcher
-                      ? "Chargement..."
+                      ? "Loading..."
                       : assignedWitcher
                         ? (
                             <span className="assignedTo">
@@ -171,7 +171,7 @@ export default function EditContract() {
                             </span>
                           )
                         : assignedWitcherError
-                          ? `#${contract.assignedTo} (erreur: ${assignedWitcherError})`
+                          ? `#${contract.assignedTo} (error: ${assignedWitcherError})`
                           : `#${contract.assignedTo}`}
                 </span>
               </div>
@@ -179,7 +179,7 @@ export default function EditContract() {
 
             <form className="form" onSubmit={onSubmit}>
               <div className="field">
-                <label htmlFor="title">Titre</label>
+                <label htmlFor="title">Title</label>
                 <input
                   id="title"
                   type="text"
@@ -201,7 +201,7 @@ export default function EditContract() {
               </div>
 
               <div className="field">
-                <label htmlFor="reward">Récompense</label>
+                <label htmlFor="reward">Reward</label>
                 <input
                   id="reward"
                   type="text"
@@ -211,10 +211,10 @@ export default function EditContract() {
                 />
               </div>
 
-              {error && <p className="error">Erreur : {error}</p>}
+              {error && <p className="error">Error: {error}</p>}
 
               <button className="primary" type="submit" disabled={submitting || isInvalid}>
-                {submitting ? "Envoi..." : "Enregistrer"}
+                {submitting ? "Saving..." : "Save"}
               </button>
             </form>
           </div>

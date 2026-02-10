@@ -14,44 +14,44 @@ export default function Home() {
   return (
     <div className="home">
       <div className="homeHero">
-        <p className="homeKicker">Tableau de contrats</p>
+        <p className="homeKicker">Contracts board</p>
         <h1 className="homeTitle">Witcher Board</h1>
         <p className="homeSubtitle">
-          Consultez les contrats, attribuez-vous une mission, puis marquez-la comme terminée.
+          Browse contracts, assign one to yourself, then mark it as completed.
         </p>
 
         <div className="homeCtaRow">
           <Link to="/contracts" className="homePrimaryCta">
-            Voir les contrats
+            View contracts
           </Link>
           <Link to="/login" className="homeSecondaryCta">
-            {witcher ? "Changer de sorceleur" : "Se connecter"}
+            {witcher ? "Switch witcher" : "Sign in"}
           </Link>
         </div>
 
         <div className="homeInfoGrid">
           <div className="homeInfoCard">
-            <h2>Filtrer</h2>
-            <p>Recherchez par titre et par statut (Available, Assigned, Completed).</p>
+            <h2>Filter</h2>
+            <p>Search by title and status (Available, Assigned, Completed).</p>
           </div>
           <div className="homeInfoCard">
-            <h2>Agir</h2>
-            <p>Connectez-vous pour vous assigner un contrat disponible et le finaliser.</p>
+            <h2>Act</h2>
+            <p>Sign in to assign yourself an available contract and complete it.</p>
           </div>
           <div className="homeInfoCard">
-            <h2>Gérer</h2>
-            <p>Créez un nouveau contrat ou modifiez un contrat existant.</p>
+            <h2>Manage</h2>
+            <p>Create a new contract or edit an existing one.</p>
           </div>
         </div>
 
         <div className="homeSession">
           {witcher ? (
             <p>
-              Connecté en tant que <strong>{witcher.name}</strong>.
+              Signed in as <strong>{witcher.name}</strong>.
             </p>
           ) : (
             <p>
-              Vous n’êtes pas connecté. Choisissez un sorceleur dans la page de connexion.
+              You are not signed in. Choose a witcher on the sign-in page.
             </p>
           )}
         </div>

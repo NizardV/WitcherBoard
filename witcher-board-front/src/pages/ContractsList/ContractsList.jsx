@@ -53,7 +53,7 @@ export default function ContractsList() {
         const data = await fetchJson(url);
         setContracts(Array.isArray(data) ? data : []);
       } catch (e) {
-        setError(e?.message ?? "Erreur inconnue");
+        setError(e?.message ?? "Unknown error");
       } finally {
         setLoading(false);
       }
@@ -92,33 +92,33 @@ export default function ContractsList() {
     <div className="page contractsList">
       <div className="container">
         <div className="pageHeader">
-          <h1>Contrats</h1>
+          <h1 className="h1">Contracts</h1>
           <Link to="/contracts/new" className="primaryLink">
-            + Créer un contrat
+            + Create contract
           </Link>
         </div>
 
         {/* Filters */}
         <div className="filters">
           <div className="field">
-            <label htmlFor="filter-title">Titre</label>
+            <label htmlFor="filter-title">Title</label>
             <input
               id="filter-title"
               type="text"
               value={titleFilter}
               onChange={(e) => setTitleFilter(e.target.value)}
-              placeholder="Ex: Griffin..."
+              placeholder="e.g. Griffin..."
             />
           </div>
 
           <div className="field">
-            <label htmlFor="filter-status">Statut</label>
+            <label htmlFor="filter-status">Status</label>
             <select
               id="filter-status"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="">Tous</option>
+              <option value="">All</option>
               <option value="Available">Available</option>
               <option value="Assigned">Assigned</option>
               <option value="Completed">Completed</option>
@@ -126,8 +126,8 @@ export default function ContractsList() {
           </div>
         </div>
 
-        {loading && <p>Chargement...</p>}
-        {error && <p className="error">Erreur : {error}</p>}
+        {loading && <p>Loading...</p>}
+        {error && <p className="error">Error: {error}</p>}
 
         <div className="grid">
           {contracts.map((c) => (

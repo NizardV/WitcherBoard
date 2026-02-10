@@ -54,7 +54,7 @@ export default function CreateContract() {
       // Contract created successfully → go back to list
       navigate("/contracts");
     } catch (e2) {
-      setError(e2?.message ?? "Erreur inconnue");
+      setError(e2?.message ?? "Unknown error");
     } finally {
       setSubmitting(false);
     }
@@ -67,23 +67,23 @@ export default function CreateContract() {
     <div className="page createContract">
       <div className="container">
         <Link to="/contracts" className="backLink">
-          ← Retour
+          ← Back
         </Link>
 
         <div className="panel">
           <header className="head">
-            <h1 className="h1">Créer un contrat</h1>
+            <h1 className="h1">Create contract</h1>
           </header>
 
           <form className="form" onSubmit={onSubmit}>
             <div className="field">
-              <label htmlFor="title">Titre</label>
+              <label htmlFor="title">Title</label>
               <input
                 id="title"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Contrat de griffon"
+                placeholder="e.g. Griffin contract"
                 required
               />
             </div>
@@ -94,28 +94,28 @@ export default function CreateContract() {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Décrivez la bête et la zone..."
+                placeholder="Describe the beast and the area..."
                 rows={5}
                 required
               />
             </div>
 
             <div className="field">
-              <label htmlFor="reward">Récompense</label>
+              <label htmlFor="reward">Reward</label>
               <input
                 id="reward"
                 type="text"
                 value={reward}
                 onChange={(e) => setReward(e.target.value)}
-                placeholder='Ex: "300 Crowns and a Rune Stone"'
+                placeholder='e.g. "300 Crowns and a Rune Stone"'
                 required
               />
             </div>
 
-            {error && <p className="error">Erreur : {error}</p>}
+            {error && <p className="error">Error: {error}</p>}
 
             <button className="primary" type="submit" disabled={submitting || isInvalid}>
-              {submitting ? "Envoi..." : "Créer"}
+              {submitting ? "Submitting..." : "Create"}
             </button>
           </form>
         </div>

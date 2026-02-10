@@ -77,7 +77,7 @@ export default function ContractDetails() {
           } catch (e) {
             // If the witcher call fails, the contract can still be shown
             if (e?.name !== "AbortError") {
-              setWitcherError(e?.message ?? "Erreur inconnue");
+              setWitcherError(e?.message ?? "Unknown error");
             }
           } finally {
             setLoadingWitcher(false);
@@ -85,7 +85,7 @@ export default function ContractDetails() {
         }
       } catch (e) {
         if (e?.name !== "AbortError") {
-          setContractError(e?.message ?? "Erreur inconnue");
+          setContractError(e?.message ?? "Unknown error");
         }
       } finally {
         setLoadingContract(false);
@@ -117,13 +117,13 @@ export default function ContractDetails() {
           const w = await fetchJson(`${API_BASE}/witchers/${c.assignedTo}`);
           setWitcher(w);
         } catch (e) {
-          setWitcherError(e?.message ?? "Erreur inconnue");
+          setWitcherError(e?.message ?? "Unknown error");
         } finally {
           setLoadingWitcher(false);
         }
       }
     } catch (e) {
-      setContractError(e?.message ?? "Erreur inconnue");
+      setContractError(e?.message ?? "Unknown error");
     } finally {
       setLoadingContract(false);
     }
@@ -154,7 +154,7 @@ export default function ContractDetails() {
 
       await refreshContract();
     } catch (e) {
-      setActionError(e?.message ?? "Erreur inconnue");
+      setActionError(e?.message ?? "Unknown error");
     } finally {
       setActionLoading(false);
     }
@@ -185,7 +185,7 @@ export default function ContractDetails() {
 
       await refreshContract();
     } catch (e) {
-      setActionError(e?.message ?? "Erreur inconnue");
+      setActionError(e?.message ?? "Unknown error");
     } finally {
       setActionLoading(false);
     }
@@ -195,11 +195,11 @@ export default function ContractDetails() {
     <div className="page contractDetails">
       <div className="container">
         <Link to="/contracts" className="backLink">
-          ← Retour
+          ← Back
         </Link>
 
-        {loadingContract && <p>Chargement...</p>}
-        {contractError && <p className="error">Erreur : {contractError}</p>}
+        {loadingContract && <p>Loading...</p>}
+        {contractError && <p className="error">Error: {contractError}</p>}
 
         {contract && (
           <div className="panel">
@@ -210,7 +210,7 @@ export default function ContractDetails() {
 
             <div className="actions">
               <Link to={`/contracts/${id}/edit`} className="secondaryLink">
-                Modifier
+                Edit
               </Link>
 
               {/* Assign button visible only when:
@@ -223,7 +223,7 @@ export default function ContractDetails() {
                   onClick={assignToCurrentWitcher}
                   disabled={actionLoading}
                 >
-                  {actionLoading ? "Assignation..." : `Assigner à ${currentWitcher.name}`}
+                  {actionLoading ? "Assigning..." : `Assign to ${currentWitcher.name}`}
                 </button>
               )}
 
@@ -240,12 +240,12 @@ export default function ContractDetails() {
                     onClick={completeContract}
                     disabled={actionLoading}
                   >
-                    {actionLoading ? "Finalisation..." : "Terminer"}
+                    {actionLoading ? "Completing..." : "Complete"}
                   </button>
                 )}
             </div>
 
-            {actionError && <p className="error">Erreur : {actionError}</p>}
+            {actionError && <p className="error">Error: {actionError}</p>}
 
             <p className="desc">{contract.description}</p>
 
@@ -267,7 +267,7 @@ export default function ContractDetails() {
                   {witcher.name}
                 </span>
               ) : witcherError ? (
-                `#${contract.assignedTo} (erreur: ${witcherError})`
+                `#${contract.assignedTo} (error: ${witcherError})`
               ) : (
                 `#${contract.assignedTo}`
               )}

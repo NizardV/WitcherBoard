@@ -40,17 +40,17 @@ export default function TopBar() {
                 {witcher.avatar ? (
                   <img className="avatar" src={witcher.avatar} alt={witcher.name} />
                 ) : null}
-                Connecté : {witcher.name}
+                Signed in: {witcher.name}
               </span>
               <button type="button" className="linkBtn" onClick={onLogout}>
-                Se déconnecter
+                Sign out
               </button>
             </>
           ) : (
             <>
-              <span className="who">Non connecté</span>
+              <span className="who">Signed out</span>
               <Link to="/login" className="linkBtn">
-                Se connecter
+                Sign in
               </Link>
             </>
           )}

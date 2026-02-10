@@ -56,7 +56,7 @@ export default function Login() {
         }
       } catch (e) {
         if (e?.name !== "AbortError") {
-          setError(e?.message ?? "Erreur inconnue");
+          setError(e?.message ?? "Unknown error");
         }
       } finally {
         setLoading(false);
@@ -82,12 +82,12 @@ export default function Login() {
     <div className="page loginPage">
       <div className="container">
         <Link to="/contracts" className="backLink">
-          ← Retour
+          ← Back
         </Link>
 
         <div className="panel">
           <header className="head">
-            <h1 className="h1">Connexion sorceleur</h1>
+            <h1 className="h1">Witcher sign-in</h1>
           </header>
 
           {witcher && (
@@ -95,12 +95,12 @@ export default function Login() {
               {witcher.avatar ? (
                 <img className="avatar" src={witcher.avatar} alt={witcher.name} />
               ) : null}
-              Actuellement connecté : <strong>{witcher.name}</strong>
+              Signed in as <strong>{witcher.name}</strong>
             </p>
           )}
 
-          {loading && <p>Chargement...</p>}
-          {error && <p className="error">Erreur : {error}</p>}
+          {loading && <p>Loading...</p>}
+          {error && <p className="error">Error: {error}</p>}
 
           {!loading && !error && (
             <form className="form" onSubmit={onSubmit}>
@@ -111,7 +111,7 @@ export default function Login() {
                 </div>
               ) : null}
               <div className="field">
-                <label htmlFor="witcher">Sorceleur</label>
+                <label htmlFor="witcher">Witcher</label>
                 <select
                   id="witcher"
                   value={selectedId}
@@ -126,7 +126,7 @@ export default function Login() {
               </div>
 
               <button className="primary" type="submit" disabled={!selected}>
-                Se connecter
+                Sign in
               </button>
             </form>
           )}

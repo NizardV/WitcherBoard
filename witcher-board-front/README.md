@@ -1,16 +1,59 @@
-# React + Vite
+# Witcher Board (Front)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application React (Vite) de gestion de contrats de chasse.
 
-Currently, two official plugins are available:
+## Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Liste des contrats avec filtres (titre + statut) via query params côté serveur.
+- Détail d’un contrat, avec chargement du sorceleur assigné (si `assignedTo`).
+- Création d’un contrat.
+- Modification d’un contrat.
+- Connexion “simplifiée” en tant que sorceleur (stockée en `sessionStorage`).
+- Actions depuis le détail : s’assigner un contrat (si disponible) et terminer le contrat (si assigné au sorceleur connecté).
 
-## React Compiler
+## Routes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `/` : accueil
+- `/contracts` : liste
+- `/contracts/new` : création
+- `/contracts/:id` : détail
+- `/contracts/:id/edit` : édition
+- `/login` : connexion sorceleur
 
-## Expanding the ESLint configuration
+## API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Base URL : `http://localhost:3000/api`
+
+Endpoints utilisés :
+
+- `GET /contracts/` (avec `title` et `status` en query params)
+- `GET /contracts/:id`
+- `POST /contracts/`
+- `PUT /contracts/:id`
+- `PUT /contracts/:id/assignedTo` (body JSON = un **integer** brut)
+- `PUT /contracts/:id/status` (body JSON = la **string** `"Completed"`)
+- `GET /witchers/`
+- `GET /witchers/:id`
+
+Notes importantes (types attendus par le backend) :
+
+- `reward` est envoyé en **string** lors de la création/édition.
+- `assignedTo` n’attend pas `{ "assignedTo": 1 }` mais `1`.
+- `status` n’attend pas `{ "status": "Completed" }` mais `"Completed"`.
+
+## Lancer le projet
+
+1) Démarrer le backend sur `http://localhost:3000`
+2) Installer et lancer le front :
+
+```bash
+npm install
+npm run dev
+```
+
+Qualité :
+
+```bash
+npm run lint
+npm run build
+```

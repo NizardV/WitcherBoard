@@ -16,7 +16,7 @@ export default function ContractsList() {
   const [contracts, setContracts] = useState([]);
 
   // Witchers lookup (used to show avatar/name for assigned contracts)
-  const [witchersById, setWitchersById] = useState(() => new Map());
+  // const [witchersById, setWitchersById] = useState(() => new Map());
 
   // UI state
   const [loading, setLoading] = useState(true);
@@ -139,7 +139,7 @@ export default function ContractsList() {
                 </header>
                 <p className="desc">{c.description}</p>
 
-                {c.assignedTo != null && witchersById.has(c.assignedTo) && (
+                {/* {c.assignedTo != null && witchersById.has(c.assignedTo) && (
                   <div className="assignedRow">
                     {witchersById.get(c.assignedTo)?.avatar ? (
                       <img
@@ -152,7 +152,7 @@ export default function ContractsList() {
                       Assigned to: {witchersById.get(c.assignedTo).name}
                     </span>
                   </div>
-                )}
+                )} */}
               </article>
             </Link>
           ))}

@@ -1,10 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useWitcher } from "../useWitcher";
+import { useWitcher } from "../../useWitcher";
 import "./login.css";
+import { API_BASE } from "../../api/config";
+import { fetchJsonOrNullOnAbort } from "../../api/http";
 
-const API_BASE = "http://localhost:3000/api";
-
+/**
+ * Login page (simplified authentication).
+ *
+ * Requirements covered:
+ * - Fetch witchers from the backend.
+ * - Let the user select one and store the identity.
+ * - Persist identity in `sessionStorage` via WitcherProvider.
+ */
 export default function Login() {
   const navigate = useNavigate();
   const { login, witcher } = useWitcher();
@@ -15,6 +23,10 @@ export default function Login() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  /**
+   * Compute the selected witcher object from the selectedId.
+   * Using useMemo avoids re-searching the list on every render.
+   */
   const selected = useMemo(() => {
     const idNum = Number(selectedId);
     if (!Number.isFinite(idNum)) return null;
@@ -29,14 +41,16 @@ export default function Login() {
         setLoading(true);
         setError("");
 
-        const res = await fetch(`${API_BASE}/witchers/`, {
+        const data = await fetchJsonOrNullOnAbort(`${API_BASE}/witchers/`, {
           signal: controller.signal,
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+
+        if (data == null) return; // aborted
+
+        // Defensive: ensure we always work with an array
         setWitchers(Array.isArray(data) ? data : []);
 
-        // default selection
+        // Default selection so the form is usable immediately
         if (Array.isArray(data) && data.length > 0) {
           setSelectedId(String(data[0].id));
         }
@@ -57,7 +71,10 @@ export default function Login() {
     e.preventDefault();
     if (!selected) return;
 
+    // Persist witcher identity (sessionStorage) via provider
     login({ id: selected.id, name: selected.name });
+
+    // Redirect to contracts list after login
     navigate("/contracts");
   }
 

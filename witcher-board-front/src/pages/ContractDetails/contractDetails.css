@@ -100,7 +100,14 @@
   color: #b00020;
 }
 
+.status-Available {
+  border-color: #2e7d32;
+}
 
-.status-Available { border-color: #2e7d32; }
-.status-Assigned { border-color: #ef6c00; }
-.status-Completed { border-color: #455a64; }
+.status-Assigned {
+  border-color: #ef6c00;
+}
+
+.status-Completed {
+  border-color: #455a64;
+}

@@ -1,19 +1,38 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./editContract.css";
+import { API_BASE } from "../../api/config";
+import { fetchJson, readErrorMessage } from "../../api/http";
 
-const API_BASE = "http://localhost:3000/api";
-
+/**
+ * Edit contract page.
+ *
+ * Requirements covered:
+ * - Route `/contracts/:id/edit`.
+ * - Pre-fill the form using `GET /contracts/:id`.
+ * - Update using `PUT /contracts/:id`.
+ *
+ * Design choice:
+ * - `status` and `assignedTo` are displayed read-only here.
+ * - We still send them back unchanged to avoid losing fields on update.
+ */
 export default function EditContract() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [contract, setContract] = useState(null);
 
+  // Assigned witcher (read-only meta info)
+  const [assignedWitcher, setAssignedWitcher] = useState(null);
+  const [loadingAssignedWitcher, setLoadingAssignedWitcher] = useState(false);
+  const [assignedWitcherError, setAssignedWitcherError] = useState("");
+
+  // Form fields
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [reward, setReward] = useState("");
 
+  // UI state
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -27,16 +46,38 @@ export default function EditContract() {
         setError("");
         setContract(null);
 
-        const res = await fetch(`${API_BASE}/contracts/${id}`, {
+        setAssignedWitcher(null);
+        setLoadingAssignedWitcher(false);
+        setAssignedWitcherError("");
+
+        // AbortController prevents stale state updates when navigating quickly
+        const c = await fetchJson(`${API_BASE}/contracts/${id}`, {
           signal: controller.signal,
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const c = await res.json();
 
         setContract(c);
         setTitle(c.title ?? "");
         setDescription(c.description ?? "");
         setReward(c.reward ?? "");
+
+        // If the contract is assigned, fetch the witcher to display their name.
+        if (c.assignedTo != null) {
+          try {
+            setLoadingAssignedWitcher(true);
+            setAssignedWitcherError("");
+
+            const w = await fetchJson(`${API_BASE}/witchers/${c.assignedTo}`, {
+              signal: controller.signal,
+            });
+            setAssignedWitcher(w);
+          } catch (e) {
+            if (e?.name !== "AbortError") {
+              setAssignedWitcherError(e?.message ?? "Erreur inconnue");
+            }
+          } finally {
+            setLoadingAssignedWitcher(false);
+          }
+        }
       } catch (e) {
         if (e?.name !== "AbortError") {
           setError(e?.message ?? "Erreur inconnue");
@@ -69,22 +110,15 @@ export default function EditContract() {
 
       const res = await fetch(`${API_BASE}/contracts/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
-        const contentType = res.headers.get("content-type") ?? "";
-        if (contentType.includes("application/json")) {
-          const data = await res.json().catch(() => null);
-          throw new Error(data?.message || JSON.stringify(data) || `HTTP ${res.status}`);
-        }
-        const text = await res.text().catch(() => "");
-        throw new Error(text || `HTTP ${res.status}`);
+        throw new Error(await readErrorMessage(res));
       }
 
+      // Back to details after successful update
       navigate(`/contracts/${id}`);
     } catch (e2) {
       setError(e2?.message ?? "Erreur inconnue");
@@ -119,7 +153,15 @@ export default function EditContract() {
               <div className="metaItem">
                 <span className="metaLabel">Assigned to</span>
                 <span className="metaValue">
-                  {contract.assignedTo == null ? "—" : `#${contract.assignedTo}`}
+                  {contract.assignedTo == null
+                    ? "—"
+                    : loadingAssignedWitcher
+                      ? "Chargement..."
+                      : assignedWitcher
+                        ? assignedWitcher.name
+                        : assignedWitcherError
+                          ? `#${contract.assignedTo} (erreur: ${assignedWitcherError})`
+                          : `#${contract.assignedTo}`}
                 </span>
               </div>
             </div>

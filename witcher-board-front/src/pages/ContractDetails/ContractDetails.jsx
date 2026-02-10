@@ -1,31 +1,53 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./contractDetails.css";
-import { useWitcher } from "../useWitcher";
+import { useWitcher } from "../../useWitcher";
+import { API_BASE } from "../../api/config";
+import { fetchJson, readErrorMessage } from "../../api/http";
 
-const API_BASE = "http://localhost:3000/api";
-
+/**
+ * Contract details page.
+ *
+ * Requirements covered:
+ * - Route `/contracts/:id`.
+ * - Load contract details from the backend.
+ * - If the contract has `assignedTo`, load the witcher details.
+ * - Show loading/error states.
+ * - Provide navigation (back link + edit link).
+ * - When a witcher is logged in: allow assigning and completing a contract.
+ */
 export default function ContractDetails() {
   const { id } = useParams();
   const { witcher: currentWitcher } = useWitcher();
 
+  // Data
   const [contract, setContract] = useState(null);
   const [witcher, setWitcher] = useState(null);
 
+  // Loading/errors for contract and witcher are separated,
+  // so the UI can still show contract details even if witcher loading fails.
   const [loadingContract, setLoadingContract] = useState(true);
   const [contractError, setContractError] = useState("");
 
   const [loadingWitcher, setLoadingWitcher] = useState(false);
   const [witcherError, setWitcherError] = useState("");
 
+  // Loading/error for actions (assign/complete)
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState("");
 
+  /**
+   * Loads the contract and its witcher (if assigned).
+   *
+   * We use AbortController to avoid setting state after unmount
+   * or when the user navigates quickly between contract IDs.
+   */
   useEffect(() => {
     const controller = new AbortController();
 
     async function load() {
       try {
+        // Reset state for a clean screen when id changes
         setLoadingContract(true);
         setContractError("");
         setContract(null);
@@ -37,25 +59,23 @@ export default function ContractDetails() {
         setLoadingWitcher(false);
         setWitcherError("");
 
-        const res = await fetch(`${API_BASE}/contracts/${id}`, {
+        const c = await fetchJson(`${API_BASE}/contracts/${id}`, {
           signal: controller.signal,
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const c = await res.json();
         setContract(c);
 
+        // When assigned, fetch the witcher details
         if (c.assignedTo != null) {
           try {
             setLoadingWitcher(true);
             setWitcherError("");
 
-            const wRes = await fetch(`${API_BASE}/witchers/${c.assignedTo}`, {
+            const w = await fetchJson(`${API_BASE}/witchers/${c.assignedTo}`, {
               signal: controller.signal,
             });
-            if (!wRes.ok) throw new Error(`HTTP ${wRes.status}`);
-            const w = await wRes.json();
             setWitcher(w);
           } catch (e) {
+            // If the witcher call fails, the contract can still be shown
             if (e?.name !== "AbortError") {
               setWitcherError(e?.message ?? "Erreur inconnue");
             }
@@ -76,30 +96,25 @@ export default function ContractDetails() {
     return () => controller.abort();
   }, [id]);
 
+  /**
+   * Reloads the contract after a mutation (assign/complete).
+   *
+   * This keeps the UI aligned with the backend (single source of truth).
+   */
   async function refreshContract() {
-    const controller = new AbortController();
-
     try {
       setLoadingContract(true);
       setContractError("");
       setWitcher(null);
       setWitcherError("");
 
-      const res = await fetch(`${API_BASE}/contracts/${id}`, {
-        signal: controller.signal,
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const c = await res.json();
+      const c = await fetchJson(`${API_BASE}/contracts/${id}`);
       setContract(c);
 
       if (c.assignedTo != null) {
         try {
           setLoadingWitcher(true);
-          const wRes = await fetch(`${API_BASE}/witchers/${c.assignedTo}`, {
-            signal: controller.signal,
-          });
-          if (!wRes.ok) throw new Error(`HTTP ${wRes.status}`);
-          const w = await wRes.json();
+          const w = await fetchJson(`${API_BASE}/witchers/${c.assignedTo}`);
           setWitcher(w);
         } catch (e) {
           setWitcherError(e?.message ?? "Erreur inconnue");
@@ -112,10 +127,14 @@ export default function ContractDetails() {
     } finally {
       setLoadingContract(false);
     }
-
-    return () => controller.abort();
   }
 
+  /**
+   * Assign the current contract to the currently logged in witcher.
+   *
+   * Important backend detail:
+   * - The endpoint expects a JSON integer (e.g. `1`), not `{ assignedTo: 1 }`.
+   */
   async function assignToCurrentWitcher() {
     if (!contract || !currentWitcher) return;
 
@@ -125,16 +144,12 @@ export default function ContractDetails() {
 
       const res = await fetch(`${API_BASE}/contracts/${id}/assignedTo`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // API expects an integer in the JSON body
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(currentWitcher.id),
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.message || `HTTP ${res.status}`);
+        throw new Error(await readErrorMessage(res));
       }
 
       await refreshContract();
@@ -145,6 +160,12 @@ export default function ContractDetails() {
     }
   }
 
+  /**
+   * Mark the contract as completed.
+   *
+   * Important backend detail:
+   * - The endpoint expects the JSON string "Completed".
+   */
   async function completeContract() {
     if (!contract) return;
 
@@ -154,16 +175,12 @@ export default function ContractDetails() {
 
       const res = await fetch(`${API_BASE}/contracts/${id}/status`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // API expects the JSON string "Completed"
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify("Completed"),
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.message || `HTTP ${res.status}`);
+        throw new Error(await readErrorMessage(res));
       }
 
       await refreshContract();
@@ -188,9 +205,7 @@ export default function ContractDetails() {
           <div className="panel">
             <header className="head">
               <h1 className="h1">{contract.title}</h1>
-              <span className={`badge status-${contract.status}`}>
-                {contract.status}
-              </span>
+              <span className={`badge status-${contract.status}`}>{contract.status}</span>
             </header>
 
             <div className="actions">
@@ -198,6 +213,9 @@ export default function ContractDetails() {
                 Modifier
               </Link>
 
+              {/* Assign button visible only when:
+                 - contract is Available
+                 - a witcher is logged in */}
               {contract.status === "Available" && currentWitcher && (
                 <button
                   type="button"
@@ -209,6 +227,10 @@ export default function ContractDetails() {
                 </button>
               )}
 
+              {/* Complete button visible only when:
+                 - contract is Assigned
+                 - a witcher is logged in
+                 - contract is assigned to THIS witcher */}
               {contract.status === "Assigned" &&
                 currentWitcher &&
                 contract.assignedTo === currentWitcher.id && (

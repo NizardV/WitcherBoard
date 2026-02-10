@@ -7,6 +7,11 @@ import WitcherProvider from "./WitcherProvider.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    {/*
+      Global provider + router.
+      - WitcherProvider persists identity in sessionStorage
+      - BrowserRouter enables navigation across pages
+    */}
     <WitcherProvider>
       <BrowserRouter>
         <App />

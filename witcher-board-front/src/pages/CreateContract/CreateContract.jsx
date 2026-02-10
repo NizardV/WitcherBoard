@@ -1,16 +1,29 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./createContract.css";
+import { API_BASE } from "../../api/config";
+import { readErrorMessage } from "../../api/http";
 
-const API_BASE = "http://localhost:3000/api";
-
+/**
+ * Create contract page.
+ *
+ * Requirements covered:
+ * - Route `/contracts/new`.
+ * - POST a new contract to the backend.
+ * - Show validation + loading + error.
+ *
+ * Backend note:
+ * - `reward` is expected as a string by the API.
+ */
 export default function CreateContract() {
   const navigate = useNavigate();
 
+  // Form fields
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [reward, setReward] = useState("");
 
+  // UI state
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -21,6 +34,7 @@ export default function CreateContract() {
       setSubmitting(true);
       setError("");
 
+      // Trim inputs to avoid sending accidental leading/trailing spaces
       const payload = {
         title: title.trim(),
         description: description.trim(),
@@ -29,23 +43,15 @@ export default function CreateContract() {
 
       const res = await fetch(`${API_BASE}/contracts/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
-        const contentType = res.headers.get("content-type") ?? "";
-        if (contentType.includes("application/json")) {
-          const data = await res.json().catch(() => null);
-          throw new Error(data?.message || JSON.stringify(data) || `HTTP ${res.status}`);
-        }
-        const text = await res.text().catch(() => "");
-        throw new Error(text || `HTTP ${res.status}`);
+        throw new Error(await readErrorMessage(res));
       }
 
-      // Contract created successfully, go back to the list
+      // Contract created successfully → go back to list
       navigate("/contracts");
     } catch (e2) {
       setError(e2?.message ?? "Erreur inconnue");
@@ -54,6 +60,7 @@ export default function CreateContract() {
     }
   }
 
+  // Basic front-side validation (backend still validates too)
   const isInvalid = !title.trim() || !description.trim() || !reward.trim();
 
   return (

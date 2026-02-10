@@ -1,20 +1,38 @@
 import { useEffect, useMemo, useState } from "react";
-import "./contracts.css";
 import { Link } from "react-router-dom";
+import "./contracts.css";
+import { API_BASE } from "../../api/config";
+import { fetchJson } from "../../api/http";
 
-const API_BASE = "http://localhost:3000/api";
-
+/**
+ * Contracts list page.
+ *
+ * Requirements covered:
+ * - Display all contracts.
+ * - Provide server-side filtering via query params (`title`, `status`).
+ * - Navigation to contract details.
+ */
 export default function ContractsList() {
   const [contracts, setContracts] = useState([]);
+
+  // UI state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Filters state
   const [titleFilter, setTitleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
+  /**
+   * Build the request URL.
+   *
+   * We compute it with `useMemo` so that the effect below can depend on it.
+   * This keeps the load effect predictable and avoids accidental infinite loops.
+   */
   const url = useMemo(() => {
     const u = new URL(`${API_BASE}/contracts/`);
 
+    // Filters are applied server-side: this matches the exam requirements.
     if (titleFilter.trim()) u.searchParams.set("title", titleFilter.trim());
     if (statusFilter) u.searchParams.set("status", statusFilter);
 
@@ -22,14 +40,15 @@ export default function ContractsList() {
   }, [titleFilter, statusFilter]);
 
   useEffect(() => {
+    // We deliberately keep this effect simple and readable.
     async function load() {
       try {
         setLoading(true);
         setError("");
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        setContracts(data);
+
+        /** @type {any[]} */
+        const data = await fetchJson(url);
+        setContracts(Array.isArray(data) ? data : []);
       } catch (e) {
         setError(e?.message ?? "Erreur inconnue");
       } finally {
@@ -50,7 +69,7 @@ export default function ContractsList() {
           </Link>
         </div>
 
-        {/* Zone de filtre */}
+        {/* Filters */}
         <div className="filters">
           <div className="field">
             <label htmlFor="filter-title">Titre</label>

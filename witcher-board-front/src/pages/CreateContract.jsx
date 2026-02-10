@@ -61,7 +61,6 @@ export default function CreateContract() {
         <div className="panel">
           <header className="head">
             <h1 className="h1">Créer un contrat</h1>
-            <p className="subtitle">Champs autorisés : titre, description, récompense.</p>
           </header>
 
           <form className="form" onSubmit={onSubmit}>

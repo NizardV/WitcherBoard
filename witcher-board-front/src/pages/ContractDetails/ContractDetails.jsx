@@ -192,7 +192,7 @@ export default function ContractDetails() {
   }
 
   return (
-    <div className="page">
+    <div className="page contractDetails">
       <div className="container">
         <Link to="/contracts" className="backLink">
           ← Retour

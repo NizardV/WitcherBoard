@@ -130,7 +130,7 @@ export default function EditContract() {
   const isInvalid = !title.trim() || !description.trim() || !reward.trim();
 
   return (
-    <div className="page">
+    <div className="page editContract">
       <div className="container">
         <Link to={`/contracts/${id}`} className="backLink">
           ← Retour au détail

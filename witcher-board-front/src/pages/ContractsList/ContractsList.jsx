@@ -60,7 +60,7 @@ export default function ContractsList() {
   }, [url]);
 
   return (
-    <div className="page">
+    <div className="page contractsList">
       <div className="container">
         <div className="pageHeader">
           <h1>Contrats</h1>

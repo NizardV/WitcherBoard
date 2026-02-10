@@ -64,7 +64,7 @@ export default function CreateContract() {
   const isInvalid = !title.trim() || !description.trim() || !reward.trim();
 
   return (
-    <div className="page">
+    <div className="page createContract">
       <div className="container">
         <Link to="/contracts" className="backLink">
           ← Retour

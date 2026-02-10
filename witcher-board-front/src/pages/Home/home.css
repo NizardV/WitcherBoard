@@ -1,3 +1,165 @@
 .home {
   padding: 24px;
 }
+
+.homeHero {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.homeKicker {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.homeTitle {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.08;
+}
+
+.homeSubtitle {
+  margin: 12px 0 0;
+  max-width: 68ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.homeCtaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.homePrimaryCta,
+.homeSecondaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.homePrimaryCta {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.homePrimaryCta:hover {
+  opacity: 0.92;
+}
+
+.homeSecondaryCta {
+  background: transparent;
+  color: inherit;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.homeSecondaryCta:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.homeInfoGrid {
+  margin-top: 22px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.homeInfoCard {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.homeInfoCard h2 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.homeInfoCard p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.homeSession {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.homeSession p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+@media (prefers-color-scheme: light) {
+  .homeHero {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.03);
+    color: #213547;
+  }
+
+  .homeKicker {
+    color: rgba(33, 53, 71, 0.72);
+  }
+
+  .homeSubtitle {
+    color: rgba(33, 53, 71, 0.86);
+  }
+
+  .homeSecondaryCta {
+    border-color: rgba(0, 0, 0, 0.18);
+  }
+
+  .homeSecondaryCta:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .homeInfoCard {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .homeInfoCard h2 {
+    color: rgba(33, 53, 71, 0.92);
+  }
+
+  .homeInfoCard p,
+  .homeSession p {
+    color: rgba(33, 53, 71, 0.82);
+  }
+
+  .homeSession {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+@media (max-width: 900px) {
+  .homeTitle {
+    font-size: 36px;
+  }
+
+  .homeInfoGrid {
+    grid-template-columns: 1fr;
+  }
+}

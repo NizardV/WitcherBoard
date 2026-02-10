@@ -1,16 +1,16 @@
-.page {
+.contractsList.page {
   padding: 24px;
   font-family: Arial, sans-serif;
 }
 
-.pageHeader {
+.contractsList .pageHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.primaryLink {
+.contractsList .primaryLink {
   text-decoration: none;
   padding: 10px 12px;
   border-radius: 8px;
@@ -20,30 +20,30 @@
   font-size: 14px;
 }
 
-.primaryLink:hover {
+.contractsList .primaryLink:hover {
   opacity: 0.92;
 }
 
-.grid {
+.contractsList .grid {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
-.card {
-  border: 1px solid #ddd;
+.contractsList .card {
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 8px;
   padding: 12px;
-  background: #fff;
-  color: #111;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.cardLink {
+.contractsList .cardLink {
   text-decoration: none;
   color: inherit;
 }
 
-.cardHeader {
+.contractsList .cardHeader {
   display: flex;
   align-items: start;
   justify-content: space-between;
@@ -51,69 +51,76 @@
   margin-bottom: 8px;
 }
 
-.title {
+.contractsList .title {
   font-size: 18px;
   margin: 0;
 }
 
-.desc {
+.contractsList .desc {
   margin: 0;
-  color: #111;
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.badge {
+.contractsList .badge {
   font-size: 12px;
   padding: 4px 8px;
   border-radius: 999px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.20);
   white-space: nowrap;
 }
 
-.error {
+.contractsList .error {
   color: #b00020;
 }
 
 /* Styles selon status */
-.status-Available {
+.contractsList .status-Available {
   border-left: 6px solid #2e7d32;
 }
 
-.status-Assigned {
+.contractsList .status-Assigned {
   border-left: 6px solid #ef6c00;
 }
 
-.status-Completed {
+.contractsList .status-Completed {
   border-left: 6px solid #455a64;
   opacity: 0.9;
 }
 
-.filters {
+.contractsList .filters {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   margin: 12px 0 16px;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 8px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.field {
+.contractsList .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
   min-width: 220px;
 }
 
-.field label {
+.contractsList .field label {
   font-size: 12px;
-  color: #333;
+  color: rgba(255, 255, 255, 0.72);
 }
 
-.field input,
-.field select {
+.contractsList .field input,
+.contractsList .field select {
   padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 14px;
+}
+
+.contractsList .field input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
 }

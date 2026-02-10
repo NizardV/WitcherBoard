@@ -79,7 +79,7 @@ export default function Login() {
   }
 
   return (
-    <div className="page">
+    <div className="page loginPage">
       <div className="container">
         <Link to="/contracts" className="backLink">
           ← Retour

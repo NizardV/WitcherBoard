@@ -1,7 +1,5 @@
 .page {
   padding: 24px;
-  max-width: 1000px;
-  margin: 0 auto;
   font-family: Arial, sans-serif;
 }
 
@@ -61,4 +59,35 @@
 .status-Completed {
   border-left: 6px solid #455a64;
   opacity: 0.9;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 16px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.field label {
+  font-size: 12px;
+  color: #333;
+}
+
+.field input,
+.field select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }

@@ -43,7 +43,12 @@ export default function ContractsList() {
   return (
     <div className="page">
       <div className="container">
-        <h1>Contrats</h1>
+        <div className="pageHeader">
+          <h1>Contrats</h1>
+          <Link to="/contracts/new" className="primaryLink">
+            + Créer un contrat
+          </Link>
+        </div>
 
         {/* Zone de filtre */}
         <div className="filters">

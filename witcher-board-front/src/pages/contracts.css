@@ -3,6 +3,27 @@
   font-family: Arial, sans-serif;
 }
 
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.primaryLink {
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+}
+
+.primaryLink:hover {
+  opacity: 0.92;
+}
+
 .grid {
   display: grid;
   gap: 12px;

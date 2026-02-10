@@ -158,7 +158,18 @@ export default function EditContract() {
                     : loadingAssignedWitcher
                       ? "Chargement..."
                       : assignedWitcher
-                        ? assignedWitcher.name
+                        ? (
+                            <span className="assignedTo">
+                              {assignedWitcher.avatar ? (
+                                <img
+                                  className="avatar"
+                                  src={assignedWitcher.avatar}
+                                  alt={assignedWitcher.name}
+                                />
+                              ) : null}
+                              {assignedWitcher.name}
+                            </span>
+                          )
                         : assignedWitcherError
                           ? `#${contract.assignedTo} (erreur: ${assignedWitcherError})`
                           : `#${contract.assignedTo}`}

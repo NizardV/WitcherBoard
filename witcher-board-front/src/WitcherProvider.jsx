@@ -13,7 +13,8 @@ function loadInitialWitcher() {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (parsed && typeof parsed.id === "number" && typeof parsed.name === "string") {
-      return parsed;
+      const avatar = typeof parsed.avatar === "string" ? parsed.avatar : "";
+      return { id: parsed.id, name: parsed.name, avatar };
     }
   } catch {
     // ignore invalid storage
@@ -42,6 +43,7 @@ export default function WitcherProvider({ children }) {
       const normalized = {
         id: Number(nextWitcher?.id),
         name: String(nextWitcher?.name ?? ""),
+        avatar: String(nextWitcher?.avatar ?? ""),
       };
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
       setWitcher(normalized);

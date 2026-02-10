@@ -12,7 +12,7 @@ export const STORAGE_KEY = "witcher";
  * Witcher session context.
  *
  * Value shape:
- * - witcher: { id: number, name: string } | null
+ * - witcher: { id: number, name: string, avatar?: string } | null
  * - login: (witcher) => void
  * - logout: () => void
  */

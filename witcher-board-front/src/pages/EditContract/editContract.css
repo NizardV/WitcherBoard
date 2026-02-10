@@ -68,6 +68,20 @@
   font-size: 14px;
 }
 
+.editContract .assignedTo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editContract .avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
 .editContract .form {
   display: grid;
   gap: 12px;

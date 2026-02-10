@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./contracts.css";
 import { API_BASE } from "../../api/config";
-import { fetchJson } from "../../api/http";
+import { fetchJson, fetchJsonOrNullOnAbort } from "../../api/http";
 
 /**
  * Contracts list page.
@@ -14,6 +14,9 @@ import { fetchJson } from "../../api/http";
  */
 export default function ContractsList() {
   const [contracts, setContracts] = useState([]);
+
+  // Witchers lookup (used to show avatar/name for assigned contracts)
+  const [witchersById, setWitchersById] = useState(() => new Map());
 
   // UI state
   const [loading, setLoading] = useState(true);
@@ -58,6 +61,32 @@ export default function ContractsList() {
 
     load();
   }, [url]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadWitchers() {
+      try {
+        const data = await fetchJsonOrNullOnAbort(`${API_BASE}/witchers/`, {
+          signal: controller.signal,
+        });
+        if (data == null) return;
+
+        const next = new Map();
+        if (Array.isArray(data)) {
+          for (const w of data) {
+            if (w && typeof w.id === "number") next.set(w.id, w);
+          }
+        }
+        setWitchersById(next);
+      } catch {
+        // Non-blocking: contracts list still works without avatars
+      }
+    }
+
+    loadWitchers();
+    return () => controller.abort();
+  }, []);
 
   return (
     <div className="page contractsList">
@@ -109,6 +138,21 @@ export default function ContractsList() {
                   <span className="badge">{c.status}</span>
                 </header>
                 <p className="desc">{c.description}</p>
+
+                {c.assignedTo != null && witchersById.has(c.assignedTo) && (
+                  <div className="assignedRow">
+                    {witchersById.get(c.assignedTo)?.avatar ? (
+                      <img
+                        className="avatar"
+                        src={witchersById.get(c.assignedTo).avatar}
+                        alt={witchersById.get(c.assignedTo).name}
+                      />
+                    ) : null}
+                    <span className="assignedName">
+                      Assigned to: {witchersById.get(c.assignedTo).name}
+                    </span>
+                  </div>
+                )}
               </article>
             </Link>
           ))}

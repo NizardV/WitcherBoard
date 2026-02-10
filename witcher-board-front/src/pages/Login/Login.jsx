@@ -72,7 +72,7 @@ export default function Login() {
     if (!selected) return;
 
     // Persist witcher identity (sessionStorage) via provider
-    login({ id: selected.id, name: selected.name });
+    login({ id: selected.id, name: selected.name, avatar: selected.avatar });
 
     // Redirect to contracts list after login
     navigate("/contracts");
@@ -92,6 +92,9 @@ export default function Login() {
 
           {witcher && (
             <p className="current">
+              {witcher.avatar ? (
+                <img className="avatar" src={witcher.avatar} alt={witcher.name} />
+              ) : null}
               Actuellement connecté : <strong>{witcher.name}</strong>
             </p>
           )}
@@ -101,6 +104,12 @@ export default function Login() {
 
           {!loading && !error && (
             <form className="form" onSubmit={onSubmit}>
+              {selected?.avatar ? (
+                <div className="selectedPreview">
+                  <img className="avatarLg" src={selected.avatar} alt={selected.name} />
+                  <div className="selectedName">{selected.name}</div>
+                </div>
+              ) : null}
               <div className="field">
                 <label htmlFor="witcher">Sorceleur</label>
                 <select

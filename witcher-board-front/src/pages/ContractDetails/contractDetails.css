@@ -92,6 +92,20 @@
   margin: 6px 0;
 }
 
+.contractDetails .assignedTo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contractDetails .avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
 .contractDetails .badge {
   font-size: 12px;
   padding: 4px 8px;

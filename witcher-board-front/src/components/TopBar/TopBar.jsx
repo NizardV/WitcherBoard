@@ -36,7 +36,12 @@ export default function TopBar() {
         <div className="right">
           {witcher ? (
             <>
-              <span className="who">Connecté : {witcher.name}</span>
+              <span className="who">
+                {witcher.avatar ? (
+                  <img className="avatar" src={witcher.avatar} alt={witcher.name} />
+                ) : null}
+                Connecté : {witcher.name}
+              </span>
               <button type="button" className="linkBtn" onClick={onLogout}>
                 Se déconnecter
               </button>

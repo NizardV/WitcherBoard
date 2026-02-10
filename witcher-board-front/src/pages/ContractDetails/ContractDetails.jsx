@@ -255,15 +255,22 @@ export default function ContractDetails() {
 
             <p className="line">
               <strong>Assigned to:</strong>{" "}
-              {contract.assignedTo == null
-                ? "—"
-                : loadingWitcher
-                  ? `#${contract.assignedTo} (chargement...)`
-                  : witcher
-                    ? `${witcher.name}`
-                    : witcherError
-                      ? `#${contract.assignedTo} (erreur: ${witcherError})`
-                      : `#${contract.assignedTo}`}
+              {contract.assignedTo == null ? (
+                "—"
+              ) : loadingWitcher ? (
+                `#${contract.assignedTo} (chargement...)`
+              ) : witcher ? (
+                <span className="assignedTo">
+                  {witcher.avatar ? (
+                    <img className="avatar" src={witcher.avatar} alt={witcher.name} />
+                  ) : null}
+                  {witcher.name}
+                </span>
+              ) : witcherError ? (
+                `#${contract.assignedTo} (erreur: ${witcherError})`
+              ) : (
+                `#${contract.assignedTo}`
+              )}
             </p>
           </div>
         )}
